@@ -11,6 +11,13 @@ import (
 )
 
 type Logger struct {
+	logger zerolog.Logger
+}
+
+func New(l zerolog.Logger) Logger {
+	return Logger{
+		logger: l,
+	}
 }
 
 func (l Logger) LogMode(logger.LogLevel) logger.Interface {
@@ -18,19 +25,19 @@ func (l Logger) LogMode(logger.LogLevel) logger.Interface {
 }
 
 func (l Logger) Error(ctx context.Context, msg string, opts ...interface{}) {
-	zerolog.Ctx(ctx).Error().Msg(fmt.Sprintf(msg, opts...))
+	l.logger.Ctx(ctx).Error().Msg(fmt.Sprintf(msg, opts...))
 }
 
 func (l Logger) Warn(ctx context.Context, msg string, opts ...interface{}) {
-	zerolog.Ctx(ctx).Warn().Msg(fmt.Sprintf(msg, opts...))
+	l.logger.Ctx(ctx).Warn().Msg(fmt.Sprintf(msg, opts...))
 }
 
 func (l Logger) Info(ctx context.Context, msg string, opts ...interface{}) {
-	zerolog.Ctx(ctx).Info().Msg(fmt.Sprintf(msg, opts...))
+	l.logger.Ctx(ctx).Info().Msg(fmt.Sprintf(msg, opts...))
 }
 
 func (l Logger) Trace(ctx context.Context, begin time.Time, f func() (string, int64), err error) {
-	zl := zerolog.Ctx(ctx)
+	zl := l.logger.Ctx(ctx)
 	var event *zerolog.Event
 
 	if err != nil {

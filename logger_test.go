@@ -45,7 +45,7 @@ func Test_Logger_Sqlite(t *testing.T) {
 
 	now := time.Now()
 
-	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{NowFunc: func() time.Time { return now }, Logger: gormzerolog.Logger{}})
+	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{NowFunc: func() time.Time { return now }, Logger: gormzerolog.New(z)})
 
 	if err != nil {
 		panic(err)
